@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Blog</title>
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            color: #7f8c8d;
+            font-size: 1.1rem;
+        }
+        
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .blog-card {
+            background: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .blog-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .blog-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        
+        .blog-content {
+            padding: 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .blog-title {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .blog-excerpt {
+            color: #7f8c8d;
+            margin-bottom: 15px;
+            flex-grow: 1;
+        }
+        
+        .blog-date {
+            font-size: 0.9rem;
+            color: #95a5a6;
+            align-self: flex-end;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 50px;
+            font-size: 1.5rem;
+            color: #7f8c8d;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+        
+        .add-blog-button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: white;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: background-color 0.3s;
+        }
+        
+        .add-blog-button:hover {
+            background-color: #2980b9;
+        }
+
+        @media (max-width: 768px) {
+            .blog-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            header {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>My Blog</h1>
+        <p class="subtitle">Thoughts, stories and ideas.</p>
+        <a href="blog-template.html" class="add-blog-button">View Blog Template</a>
+    </header>
+    
+    <main>
+        <div id="blogContainer" class="blog-grid">
+            <!-- Blogs will be dynamically inserted here -->
+        </div>
+    </main>
+    
+    <footer>
+        <p>&copy; 2025 My Blog. All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // This approach uses a static list of blog files
+            // In a GitHub Pages environment, you'll maintain this list manually
+            // or generate it through your GitHub workflow
+            
+            // List of blog posts to display - manually maintain this list
+            // when adding new blog posts
+            const blogPosts = [
+                { 
+                    file: 'blog1.html',
+                    title: 'Top Web Development Trends for 2025',
+                    description: 'Learn about the most exciting web development trends for 2025 including AI-driven interfaces, WebAssembly, and more.',
+                    date: '2025-03-10',
+                    image: '/api/placeholder/800/400'
+                },
+                // Add new blog entries here when you create them
+            ];
+            
+            // Alternative: Auto-discovery of blogs approach (works on localhost and some hosts)
+            async function discoverBlogs() {
+                try {
+                    // Try to fetch known blog files first
+                    for (const blog of blogPosts) {
+                        await fetchBlogDetails(blog);
+                    }
+                    
+                    // Then attempt to discover additional .html files that might be blogs
+                    // This is experimental and may not work on all hosts
+                    tryFindAdditionalBlogs();
+                    
+                    // Render what we have
+                    renderBlogCards();
+                } catch (error) {
+                    console.error('Error discovering blogs:', error);
+                    // Fall back to the static list if there's an error
+                    renderBlogCards();
+                }
+            }
+            
+            // Function to fetch additional details from a blog file
+            async function fetchBlogDetails(blog) {
+                try {
+                    const response = await fetch(blog.file);
+                    if (!response.ok) return;
+                    
+                    const html = await response.text();
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(html, 'text/html');
+                    
+                    // Extract or update blog metadata from the file
+                    blog.title = doc.querySelector('title')?.textContent || blog.title || 'Untitled Blog';
+                    const metaDescription = doc.querySelector('meta[name="description"]')?.getAttribute('content');
+                    if (metaDescription) blog.description = metaDescription;
+                    
+                    const metaImage = doc.querySelector('meta[property="og:image"]')?.getAttribute('content');
+                    if (metaImage) blog.image = metaImage;
+                    
+                    const metaDate = doc.querySelector('meta[name="date"]')?.getAttribute('content');
+                    if (metaDate) blog.date = metaDate;
+                    
+                    return blog;
+                } catch (e) {
+                    console.warn(`Error processing ${blog.file}:`, e);
+                    return blog;
+                }
+            }
+            
+            // Experimental function to try to discover additional blog files
+            async function tryFindAdditionalBlogs() {
+                // This is basic and experimental - it tries to find blog2.html, blog3.html, etc.
+                // It will only work in environments that allow this kind of access
+                const knownFiles = blogPosts.map(blog => blog.file);
+                
+                for (let i = 2; i <= 10; i++) {
+                    const fileName = `blog${i}.html`;
+                    if (knownFiles.includes(fileName)) continue;
+                    
+                    try {
+                        const response = await fetch(fileName, { method: 'HEAD' });
+                        if (response.ok) {
+                            const newBlog = { file: fileName };
+                            await fetchBlogDetails(newBlog);
+                            blogPosts.push(newBlog);
+                        }
+                    } catch (e) {
+                        // Ignore errors - this is just a best-effort attempt
+                    }
+                }
+            }
+            
+            // Function to render blog cards
+            function renderBlogCards() {
+                const container = document.getElementById('blogContainer');
+                
+                if (blogPosts.length === 0) {
+                    container.innerHTML = `
+                        <div class="loading">
+                            No blog posts found. Create your first blog post by copying the blog template.
+                        </div>`;
+                    return;
+                }
+                
+                // Sort blogs by date (newest first)
+                const sortedBlogs = [...blogPosts].sort((a, b) => {
+                    const dateA = a.date ? new Date(a.date) : new Date(0);
+                    const dateB = b.date ? new Date(b.date) : new Date(0);
+                    return dateB - dateA;
+                });
+                
+                container.innerHTML = sortedBlogs.map(blog => `
+                    <div class="blog-card" onclick="window.location.href='${blog.file}'">
+                        <img class="blog-image" src="${blog.image || '/api/placeholder/400/320'}" alt="${blog.title}">
+                        <div class="blog-content">
+                            <h2 class="blog-title">${blog.title}</h2>
+                            <p class="blog-excerpt">${blog.description || 'Click to read this blog post.'}</p>
+                            <span class="blog-date">${blog.date || 'No date'}</span>
+                        </div>
+                    </div>
+                `).join('');
+            }
+            
+            // Start the blog discovery process
+            discoverBlogs();
+        });
+    </script>
+</body>
+          </html>
