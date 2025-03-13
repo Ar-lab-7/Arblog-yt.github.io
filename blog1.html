@@ -3,571 +3,521 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Learn how to create a responsive navigation bar with HTML, CSS, and JavaScript that works well on all devices.">
     <meta name="date" content="March 13, 2025">
-    <meta name="featured-image" content="/api/placeholder/400/320">
-    <title>Building a Responsive Navigation Bar</title>
+    <meta name="description" content="Learn how to create a responsive navbar with HTML, CSS, and JavaScript">
+    <title>Create a Responsive Navbar | Dev Blog</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
     <style>
+        :root {
+            --primary: #3498db;
+            --secondary: #2c3e50;
+            --background: #f5f5f5;
+            --text: #333;
+            --card: #fff;
+            --accent: #e74c3c;
+            --code-bg: #282c34;
+        }
+        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
+        
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--background);
+            color: var(--text);
             line-height: 1.6;
-            color: #333;
-            background-color: #f8f9fa;
-            padding-bottom: 70px; /* Space for fixed footer */
         }
+        
         header {
-            background-color: #343a40;
-            color: #fff;
-            padding: 2rem 0;
+            background-color: var(--secondary);
+            color: white;
+            padding: 1.5rem;
             text-align: center;
         }
+        
         .container {
-            max-width: 900px;
+            max-width: 1000px;
             margin: 0 auto;
-            padding: 0 20px;
+            padding: 2rem;
+            background-color: var(--card);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            min-height: calc(100vh - 150px);
         }
+        
         .blog-header {
-            text-align: center;
             margin-bottom: 2rem;
         }
-        h1 {
-            font-size: 2.5rem;
+        
+        .blog-title {
+            font-size: 2rem;
+            color: var(--secondary);
             margin-bottom: 0.5rem;
         }
-        .publish-date {
-            color: #6c757d;
+        
+        .blog-meta {
+            color: #666;
+            margin-bottom: 1.5rem;
             font-size: 0.9rem;
-            margin-bottom: 1rem;
         }
+        
         .blog-content {
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            padding: 2rem;
             margin-bottom: 2rem;
         }
-        .section {
-            display: none;
-            min-height: 400px;
+        
+        .blog-content p {
+            margin-bottom: 1.5rem;
         }
-        .section.active {
-            display: block;
-        }
-        h2 {
-            font-size: 1.8rem;
-            margin: 1.5rem 0 1rem;
-            color: #212529;
-        }
-        h3 {
-            font-size: 1.4rem;
-            margin: 1.2rem 0 0.8rem;
-            color: #343a40;
-        }
-        p {
-            margin-bottom: 1rem;
-        }
-        img {
+        
+        .blog-content img {
             max-width: 100%;
-            height: auto;
-            border-radius: 8px;
-            margin: 1.5rem 0;
             display: block;
-        }
-        .code-nav {
-            display: flex;
-            background-color: #f1f1f1;
-            border-radius: 8px 8px 0 0;
-            overflow: hidden;
-        }
-        .code-nav-item {
-            padding: 0.5rem 1rem;
-            background-color: #e9ecef;
-            border: none;
-            cursor: pointer;
-            font-size: 0.9rem;
-        }
-        .code-nav-item.active {
-            background-color: #343a40;
-            color: white;
-        }
-        pre {
-            margin: 0 !important;
-            border-radius: 0 0 8px 8px;
-            position: relative;
-        }
-        .code-container {
-            position: relative;
-        }
-        .copy-btn {
-            position: absolute;
-            top: 0.5rem;
-            right: 0.5rem;
-            background-color: rgba(255, 255, 255, 0.2);
-            border: none;
+            margin: 2rem auto;
             border-radius: 4px;
-            color: white;
-            padding: 5px 10px;
-            font-size: 0.8rem;
-            cursor: pointer;
-            z-index: 10;
         }
-        .copy-btn:hover {
-            background-color: rgba(255, 255, 255, 0.3);
+        
+        .blog-content h2 {
+            margin: 2rem 0 1rem;
+            color: var(--secondary);
         }
-        footer {
+        
+        .blog-content pre {
+            background-color: var(--code-bg);
+            padding: 1rem;
+            border-radius: 4px;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+        }
+        
+        .blog-content code {
+            font-family: 'Courier New', Courier, monospace;
+        }
+        
+        .section-tabs {
             position: fixed;
             bottom: 0;
             left: 0;
             width: 100%;
-            background-color: #343a40;
-            color: #fff;
-            padding: 0.8rem 0;
-        }
-        .footer-nav {
             display: flex;
-            justify-content: space-around;
-        }
-        .footer-nav-btn {
-            background-color: transparent;
-            border: none;
-            color: white;
-            font-size: 1rem;
-            cursor: pointer;
-            padding: 0.3rem 1rem;
-            border-radius: 4px;
-        }
-        .footer-nav-btn.active {
-            background-color: rgba(255, 255, 255, 0.2);
-        }
-        .footer-nav-btn:hover {
-            background-color: rgba(255, 255, 255, 0.1);
+            background-color: var(--secondary);
+            z-index: 1000;
         }
         
-        /* Preview specific styles */
-        .preview-container {
-            border: 1px solid #ddd;
-            border-radius: 8px;
+        .section-tabs button {
+            flex: 1;
+            background-color: var(--secondary);
+            color: white;
+            border: none;
             padding: 1rem;
-            margin-bottom: 1rem;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+        
+        .section-tabs button.active {
+            background-color: var(--primary);
+        }
+        
+        .section-tabs button:hover {
+            background-color: #34495e;
+        }
+        
+        .blog-section {
+            display: none;
+        }
+        
+        .blog-section.active {
+            display: block;
+        }
+        
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #21252b;
+            padding: 0.5rem 1rem;
+            border-top-left-radius: 4px;
+            border-top-right-radius: 4px;
+        }
+        
+        .file-tabs {
+            display: flex;
+            overflow-x: auto;
+        }
+        
+        .file-tab {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            background-color: #282c34;
+            color: #abb2bf;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px 4px 0 0;
+        }
+        
+        .file-tab.active {
+            background-color: #3498db;
+            color: white;
+        }
+        
+        .code-actions {
+            display: flex;
+        }
+        
+        .copy-btn {
+            background-color: transparent;
+            color: #abb2bf;
+            border: 1px solid #abb2bf;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+        
+        .copy-btn:hover {
+            background-color: #3498db;
+            color: white;
+            border-color: #3498db;
+        }
+        
+        .preview-container {
+            padding: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-top: 1rem;
             background-color: white;
         }
         
-        /* Demo navbar styles for preview */
-        .demo-navbar {
-            background-color: #333;
-            overflow: hidden;
-            border-radius: 5px;
-        }
-        .demo-navbar a {
-            float: left;
-            display: block;
-            color: white;
-            text-align: center;
-            padding: 14px 16px;
+        .back-link {
+            display: inline-block;
+            margin-bottom: 1rem;
+            color: var(--primary);
             text-decoration: none;
         }
-        .demo-navbar a:hover {
-            background-color: #ddd;
-            color: black;
-        }
-        .demo-navbar .icon {
-            display: none;
-        }
-        @media screen and (max-width: 600px) {
-            .demo-navbar a:not(:first-child) {
-                display: none;
-            }
-            .demo-navbar a.icon {
-                float: right;
-                display: block;
-            }
-            .demo-navbar.responsive {
-                position: relative;
-            }
-            .demo-navbar.responsive a.icon {
-                position: absolute;
-                right: 0;
-                top: 0;
-            }
-            .demo-navbar.responsive a {
-                float: none;
-                display: block;
-                text-align: left;
-            }
+        
+        .back-link:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
 <body>
     <header>
-        <div class="container">
-            <h1>Building a Responsive Navigation Bar</h1>
-            <div class="publish-date">Published on March 13, 2025</div>
-        </div>
+        <h1>Dev Blog</h1>
     </header>
-
+    
     <div class="container">
-        <div class="blog-content">
-            <!-- Reading Section -->
-            <section id="reading" class="section active">
-                <h2>Creating a Responsive Navigation Bar</h2>
-                <p>Navigation bars are a fundamental component of modern websites. They help users navigate between different pages and sections of your site. In this tutorial, we'll build a responsive navigation bar that works well on both desktop and mobile devices.</p>
-                
-                <img src="/api/placeholder/400/320" alt="Responsive Navigation Bar Example">
-                
-                <p>A responsive navigation bar adjusts its layout based on the screen size. On desktop, it typically displays all navigation links horizontally. On mobile devices, it collapses into a "hamburger menu" to save space.</p>
-                
-                <h3>Key Features</h3>
-                <p>Our responsive navigation bar will include:</p>
-                <ul>
-                    <li>Horizontal layout on desktop screens</li>
-                    <li>Collapsible "hamburger menu" on mobile screens</li>
-                    <li>Smooth transitions for a better user experience</li>
-                    <li>Active state to highlight the current page</li>
-                </ul>
-                
-                <h3>Understanding the Structure</h3>
-                <p>We'll build our navigation bar using HTML for structure, CSS for styling, and a small amount of JavaScript for the mobile toggle functionality. The navigation will include:</p>
-                <ul>
-                    <li>A brand/logo area</li>
-                    <li>Navigation links</li>
-                    <li>A toggle button for mobile devices</li>
-                </ul>
-                
-                <p>Let's get started by looking at the code and then see it in action!</p>
-            </section>
+        <a href="index.html" class="back-link">← Back to all blogs</a>
+        
+        <div class="blog-section active" id="reading-section">
+            <div class="blog-header">
+                <h1 class="blog-title">Create a Responsive Navbar</h1>
+                <div class="blog-meta">Published on March 13, 2025 | By Dev Blog Admin</div>
+            </div>
             
-            <!-- Code Section -->
-            <section id="code" class="section">
-                <h2>Code Implementation</h2>
+            <div class="blog-content">
+                <p>In today's tutorial, we'll create a responsive navigation bar that adapts to different screen sizes. A well-designed navigation is crucial for user experience, especially as users access websites from various devices.</p>
                 
-                <div class="code-nav">
-                    <button class="code-nav-item active" data-file="html">HTML</button>
-                    <button class="code-nav-item" data-file="css">CSS</button>
-                    <button class="code-nav-item" data-file="js">JavaScript</button>
+                <h2>Why responsive navigation matters</h2>
+                <p>With the increasing number of mobile users, having a navigation that works well on all devices is essential. A responsive navbar collapses into a hamburger menu on smaller screens, saving space while maintaining accessibility.</p>
+                
+                <h2>HTML Structure</h2>
+                <p>We'll start with a simple structure consisting of a logo and navigation links. The key is to include a hamburger menu button that will only be visible on smaller screens.</p>
+                
+                <h2>Styling with CSS</h2>
+                <p>Our CSS will use flexbox for layout and media queries to change the appearance based on screen width. The navigation links will display horizontally on larger screens and vertically in a dropdown menu on smaller ones.</p>
+                
+                <h2>Adding Interactivity with JavaScript</h2>
+                <p>JavaScript will handle toggling the mobile menu when the hamburger icon is clicked. This creates a smooth user experience without requiring page reloads.</p>
+                
+                <p>Follow along with the code provided in the Code section, and see the results in the Preview section!</p>
+            </div>
+        </div>
+        
+        <div class="blog-section" id="code-section">
+            <div class="blog-header">
+                <h1 class="blog-title">Code Implementation</h1>
+            </div>
+            
+            <div class="file-tabs">
+                <button class="file-tab active" data-file="html">index.html</button>
+                <button class="file-tab" data-file="css">styles.css</button>
+                <button class="file-tab" data-file="js">script.js</button>
+            </div>
+            
+            <div class="code-container active" id="html-code">
+                <div class="code-header">
+                    <span>index.html</span>
+                    <div class="code-actions">
+                        <button class="copy-btn" data-target="html-content">Copy Code</button>
+                    </div>
                 </div>
-                
-                <div class="code-container" id="html-code">
-                    <button class="copy-btn" onclick="copyCode('html-snippet')">Copy</button>
-                    <pre><code class="language-html" id="html-snippet">&lt;!DOCTYPE html&gt;
+                <pre><code class="language-html" id="html-content">&lt;!DOCTYPE html&gt;
 &lt;html lang="en"&gt;
 &lt;head&gt;
     &lt;meta charset="UTF-8"&gt;
     &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
     &lt;title&gt;Responsive Navbar&lt;/title&gt;
     &lt;link rel="stylesheet" href="styles.css"&gt;
-    &lt;link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"&gt;
 &lt;/head&gt;
 &lt;body&gt;
     &lt;nav class="navbar"&gt;
-        &lt;div class="brand"&gt;YourWebsite&lt;/div&gt;
-        &lt;a href="javascript:void(0);" class="toggle-btn" onclick="toggleNavbar()"&gt;
-            &lt;i class="fas fa-bars"&gt;&lt;/i&gt;
-        &lt;/a&gt;
-        &lt;div class="navbar-links"&gt;
-            &lt;a href="#" class="active"&gt;Home&lt;/a&gt;
-            &lt;a href="#"&gt;About&lt;/a&gt;
-            &lt;a href="#"&gt;Services&lt;/a&gt;
-            &lt;a href="#"&gt;Products&lt;/a&gt;
-            &lt;a href="#"&gt;Contact&lt;/a&gt;
+        &lt;div class="navbar-logo"&gt;
+            &lt;a href="#"&gt;DevBlog&lt;/a&gt;
         &lt;/div&gt;
+        
+        &lt;div class="navbar-toggle" id="navbar-toggle"&gt;
+            &lt;span&gt;&lt;/span&gt;
+            &lt;span&gt;&lt;/span&gt;
+            &lt;span&gt;&lt;/span&gt;
+        &lt;/div&gt;
+        
+        &lt;ul class="navbar-links" id="navbar-links"&gt;
+            &lt;li&gt;&lt;a href="#" class="active"&gt;Home&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a href="#"&gt;Tutorials&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a href="#"&gt;Projects&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a href="#"&gt;About&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a href="#"&gt;Contact&lt;/a&gt;&lt;/li&gt;
+        &lt;/ul&gt;
     &lt;/nav&gt;
-    
-    &lt;div class="content"&gt;
-        &lt;h1&gt;Welcome to Our Website&lt;/h1&gt;
-        &lt;p&gt;This is a demonstration of a responsive navigation bar.&lt;/p&gt;
-    &lt;/div&gt;
     
     &lt;script src="script.js"&gt;&lt;/script&gt;
 &lt;/body&gt;
 &lt;/html&gt;</code></pre>
+            </div>
+            
+            <div class="code-container" id="css-code" style="display: none;">
+                <div class="code-header">
+                    <span>styles.css</span>
+                    <div class="code-actions">
+                        <button class="copy-btn" data-target="css-content">Copy Code</button>
+                    </div>
                 </div>
-                
-                <div class="code-container" id="css-code" style="display: none;">
-                    <button class="copy-btn" onclick="copyCode('css-snippet')">Copy</button>
-                    <pre><code class="language-css" id="css-snippet">* {
+                <pre><code class="language-css" id="css-content">* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
 body {
-    font-family: 'Arial', sans-serif;
-    line-height: 1.6;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .navbar {
-    background-color: #333;
-    overflow: hidden;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 20px;
+    background-color: #2c3e50;
+    padding: 1rem 2rem;
+    color: white;
 }
 
-.brand {
+.navbar-logo a {
     color: white;
     font-size: 1.5rem;
     font-weight: bold;
-    padding: 14px 0;
+    text-decoration: none;
 }
 
 .navbar-links {
     display: flex;
+    list-style: none;
+}
+
+.navbar-links li {
+    margin-left: 1.5rem;
 }
 
 .navbar-links a {
-    color: white;
-    text-align: center;
-    padding: 14px 16px;
+    color: #ecf0f1;
     text-decoration: none;
-    transition: background-color 0.3s;
+    transition: color 0.3s;
 }
 
-.navbar-links a:hover {
-    background-color: #ddd;
-    color: black;
-}
-
+.navbar-links a:hover,
 .navbar-links a.active {
-    background-color: #4CAF50;
-    color: white;
+    color: #3498db;
 }
 
-.toggle-btn {
+.navbar-toggle {
     display: none;
-    color: white;
-    font-size: 1.5rem;
-    padding: 14px 16px;
-    text-decoration: none;
+    flex-direction: column;
+    cursor: pointer;
 }
 
-/* Media Query for Responsive Design */
+.navbar-toggle span {
+    width: 25px;
+    height: 3px;
+    background-color: white;
+    margin: 2px 0;
+    transition: all 0.3s ease;
+}
+
+/* Responsive styles */
 @media screen and (max-width: 768px) {
-    .navbar {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-    
-    .navbar-top {
-        width: 100%;
+    .navbar-toggle {
         display: flex;
-        justify-content: space-between;
-        align-items: center;
     }
     
     .navbar-links {
-        display: none;
+        position: absolute;
+        top: 60px;
+        left: 0;
+        right: 0;
         flex-direction: column;
-        width: 100%;
+        background-color: #2c3e50;
+        text-align: center;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
     }
     
     .navbar-links.active {
-        display: flex;
+        max-height: 300px;
+    }
+    
+    .navbar-links li {
+        margin: 0;
     }
     
     .navbar-links a {
-        text-align: left;
-        padding: 15px;
-        border-top: 1px solid rgba(255, 255, 255, 0.1);
-    }
-    
-    .toggle-btn {
         display: block;
-        align-self: flex-end;
-    }
-    
-    .content {
-        padding: 20px;
+        padding: 1rem;
+        border-top: 1px solid #34495e;
     }
 }</code></pre>
+            </div>
+            
+            <div class="code-container" id="js-code" style="display: none;">
+                <div class="code-header">
+                    <span>script.js</span>
+                    <div class="code-actions">
+                        <button class="copy-btn" data-target="js-content">Copy Code</button>
+                    </div>
                 </div>
-                
-                <div class="code-container" id="js-code" style="display: none;">
-                    <button class="copy-btn" onclick="copyCode('js-snippet')">Copy</button>
-                    <pre><code class="language-javascript" id="js-snippet">// Function to toggle the navigation menu on mobile
-function toggleNavbar() {
-    const navbarLinks = document.querySelector('.navbar-links');
-    navbarLinks.classList.toggle('active');
-}
-
-// Close the navbar when a link is clicked (mobile view)
-document.addEventListener('DOMContentLoaded', function() {
-    const navLinks = document.querySelectorAll('.navbar-links a');
+                <pre><code class="language-javascript" id="js-content">document.addEventListener('DOMContentLoaded', function() {
+    const navbarToggle = document.getElementById('navbar-toggle');
+    const navbarLinks = document.getElementById('navbar-links');
     
-    navLinks.forEach(link => {
-        link.addEventListener('click', function() {
-            if (window.innerWidth <= 768) {
-                const navbarLinks = document.querySelector('.navbar-links');
-                navbarLinks.classList.remove('active');
-            }
-        });
+    navbarToggle.addEventListener('click', function() {
+        navbarLinks.classList.toggle('active');
+        
+        // Animate hamburger to X
+        const spans = navbarToggle.querySelectorAll('span');
+        spans.forEach(span => span.classList.toggle('active'));
     });
     
-    // Add resize listener to handle transitions between mobile and desktop
-    window.addEventListener('resize', function() {
-        if (window.innerWidth > 768) {
-            const navbarLinks = document.querySelector('.navbar-links');
-            if (navbarLinks.classList.contains('active')) {
-                navbarLinks.classList.remove('active');
-            }
+    // Close menu when clicking outside
+    document.addEventListener('click', function(event) {
+        const isNavbar = event.target.closest('.navbar');
+        if (!isNavbar && navbarLinks.classList.contains('active')) {
+            navbarLinks.classList.remove('active');
+            const spans = navbarToggle.querySelectorAll('span');
+            spans.forEach(span => span.classList.remove('active'));
         }
     });
 });</code></pre>
-                </div>
-            </section>
-            
-            <!-- Preview Section -->
-            <section id="preview" class="section">
-                <h2>Live Preview</h2>
-                <p>Below is a working preview of our responsive navigation bar. Try resizing your browser window to see how it adapts to different screen sizes.</p>
-                
-                <div class="preview-container">
-                    <div class="demo-navbar" id="demoNavbar">
-                        <a href="#" class="active">Home</a>
-                        <a href="#">About</a>
-                        <a href="#">Services</a>
-                        <a href="#">Products</a>
-                        <a href="#">Contact</a>
-                        <a href="javascript:void(0);" class="icon" onclick="toggleDemoNav()">
-                            ☰
-                        </a>
-                    </div>
-                </div>
-                
-                <p>On mobile devices (or smaller browser windows), the navigation links collapse into a hamburger menu (☰) that can be toggled open and closed.</p>
-                
-                <h3>How It Works</h3>
-                <ul>
-                    <li>The HTML provides the structure for our navigation bar</li>
-                    <li>CSS handles both the styling and the responsive layout changes</li>
-                    <li>JavaScript adds interactivity for the mobile toggle</li>
-                </ul>
-                
-                <p>This implementation is lightweight, accessible, and works across all modern browsers. You can easily customize the colors, spacing, and animations to match your website's design.</p>
-            </section>
-        </div>
-    </div>
-
-    <footer>
-        <div class="container">
-            <div class="footer-nav">
-                <button id="readingBtn" class="footer-nav-btn active">Reading</button>
-                <button id="codeBtn" class="footer-nav-btn">Code</button>
-                <button id="previewBtn" class="footer-nav-btn">Preview</button>
             </div>
         </div>
-    </footer>
-
+        
+        <div class="blog-section" id="preview-section">
+            <div class="blog-header">
+                <h1 class="blog-title">Live Preview</h1>
+            </div>
+            
+            <div class="preview-container">
+                <nav style="display: flex; justify-content: space-between; align-items: center; background-color: #2c3e50; padding: 1rem 2rem; color: white;">
+                    <div style="font-size: 1.5rem; font-weight: bold;">
+                        <a href="#" style="color: white; text-decoration: none;">DevBlog</a>
+                    </div>
+                    
+                    <div style="display: flex; list-style: none;">
+                        <a href="#" style="color: #3498db; text-decoration: none; margin-left: 1.5rem;">Home</a>
+                        <a href="#" style="color: #ecf0f1; text-decoration: none; margin-left: 1.5rem;">Tutorials</a>
+                        <a href="#" style="color: #ecf0f1; text-decoration: none; margin-left: 1.5rem;">Projects</a>
+                        <a href="#" style="color: #ecf0f1; text-decoration: none; margin-left: 1.5rem;">About</a>
+                        <a href="#" style="color: #ecf0f1; text-decoration: none; margin-left: 1.5rem;">Contact</a>
+                    </div>
+                </nav>
+                <div style="padding: 1rem; text-align: center;">
+                    <p>⚠️ Interactive preview not available in static display.</p>
+                    <p>The code provides a fully responsive navbar that collapses into a hamburger menu on mobile screens.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="section-tabs">
+        <button class="active" data-section="reading-section">Reading</button>
+        <button data-section="code-section">Code</button>
+        <button data-section="preview-section">Preview</button>
+    </div>
+    
     <script>
-        // Syntax highlighting
         document.addEventListener('DOMContentLoaded', function() {
+            // Initialize syntax highlighting
             hljs.highlightAll();
             
-            // Navigation buttons
-            const readingBtn = document.getElementById('readingBtn');
-            const codeBtn = document.getElementById('codeBtn');
-            const previewBtn = document.getElementById('previewBtn');
+            // Section tabs functionality
+            const sectionTabs = document.querySelectorAll('.section-tabs button');
+            const sections = document.querySelectorAll('.blog-section');
             
-            const readingSection = document.getElementById('reading');
-            const codeSection = document.getElementById('code');
-            const previewSection = document.getElementById('preview');
-            
-            // Footer navigation
-            readingBtn.addEventListener('click', function() {
-                setActiveSection(readingSection, readingBtn);
-            });
-            
-            codeBtn.addEventListener('click', function() {
-                setActiveSection(codeSection, codeBtn);
-            });
-            
-            previewBtn.addEventListener('click', function() {
-                setActiveSection(previewSection, previewBtn);
-            });
-            
-            function setActiveSection(section, button) {
-                // Hide all sections
-                document.querySelectorAll('.section').forEach(s => {
-                    s.classList.remove('active');
-                });
-                
-                // Remove active class from all buttons
-                document.querySelectorAll('.footer-nav-btn').forEach(b => {
-                    b.classList.remove('active');
-                });
-                
-                // Show active section and button
-                section.classList.add('active');
-                button.classList.add('active');
-                
-                // Scroll to top of content
-                window.scrollTo({
-                    top: 0,
-                    behavior: 'smooth'
-                });
-            }
-            
-            // Code tab navigation
-            const codeNavItems = document.querySelectorAll('.code-nav-item');
-            const htmlCode = document.getElementById('html-code');
-            const cssCode = document.getElementById('css-code');
-            const jsCode = document.getElementById('js-code');
-            
-            codeNavItems.forEach(item => {
-                item.addEventListener('click', function() {
-                    // Remove active class from all tabs
-                    codeNavItems.forEach(tab => {
-                        tab.classList.remove('active');
-                    });
-                    
-                    // Add active class to clicked tab
+            sectionTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // Update active tab
+                    sectionTabs.forEach(t => t.classList.remove('active'));
                     this.classList.add('active');
                     
-                    // Hide all code containers
-                    htmlCode.style.display = 'none';
-                    cssCode.style.display = 'none';
-                    jsCode.style.display = 'none';
+                    // Show corresponding section
+                    const sectionId = this.getAttribute('data-section');
+                    sections.forEach(section => {
+                        section.classList.remove('active');
+                    });
+                    document.getElementById(sectionId).classList.add('active');
+                });
+            });
+            
+            // File tabs functionality
+            const fileTabs = document.querySelectorAll('.file-tab');
+            const codeContainers = document.querySelectorAll('.code-container');
+            
+            fileTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // Update active tab
+                    fileTabs.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
                     
-                    // Show selected code container
+                    // Show corresponding code
                     const fileType = this.getAttribute('data-file');
-                    document.getElementById(fileType + '-code').style.display = 'block';
+                    codeContainers.forEach(container => {
+                        container.style.display = 'none';
+                    });
+                    document.getElementById(`${fileType}-code`).style.display = 'block';
                 });
             });
             
             // Copy code functionality
-            window.copyCode = function(elementId) {
-                const codeElement = document.getElementById(elementId);
-                const textToCopy = codeElement.textContent;
-                
-                navigator.clipboard.writeText(textToCopy).then(function() {
-                    const copyBtn = document.querySelector(`button[onclick="copyCode('${elementId}')"]`);
-                    const originalText = copyBtn.textContent;
-                    
-                    copyBtn.textContent = 'Copied!';
-                    setTimeout(() => {
-                        copyBtn.textContent = originalText;
-                    }, 2000);
-                }).catch(function(err) {
-                    console.error('Failed to copy: ', err);
-                });
-            };
+            const copyButtons = document.querySelectorAll('.copy-btn');
             
-            // Toggle demo navbar for preview section
-            window.toggleDemoNav = function() {
-                const navbar = document.getElementById("demoNavbar");
-                if (navbar.className === "demo-navbar") {
-                    navbar.className += " responsive";
-                } else {
-                    navbar.className = "demo-navbar";
-                }
-            };
+            copyButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const targetId = this.getAttribute('data-target');
+                    const codeElement = document.getElementById(targetId);
+                    const codeText = codeElement.textContent;
+                    
+                    navigator.clipboard.writeText(codeText).then(() => {
+                        const originalText = this.textContent;
+                        this.textContent = 'Copied!';
+                        setTimeout(() => {
+                            this.textContent = originalText;
+                        }, 2000);
+                    }).catch(err => {
+                        console.error('Failed to copy:', err);
+                    });
+                });
+            });
         });
     </script>
 </body>
