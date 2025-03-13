@@ -3,192 +3,260 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Code Blog</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css">
+    <title>My Blog</title>
     <style>
+        /* Reset and Base Styles */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
+        
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
             color: #333;
             background-color: #f8f9fa;
-        }
-        header {
-            background-color: #343a40;
-            color: #fff;
-            padding: 2rem 0;
-            text-align: center;
-        }
-        .container {
+            padding: 20px;
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0 20px;
         }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
         h1 {
             font-size: 2.5rem;
-            margin-bottom: 0.5rem;
+            color: #2c3e50;
+            margin-bottom: 10px;
         }
+        
         .subtitle {
-            font-size: 1.2rem;
-            color: #e9ecef;
-            margin-bottom: 1rem;
+            color: #7f8c8d;
+            font-size: 1.1rem;
         }
+        
         .blog-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 2rem;
-            padding: 2rem 0;
+            gap: 30px;
         }
+        
         .blog-card {
-            background-color: #fff;
+            background: #fff;
             border-radius: 8px;
             overflow: hidden;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
-            text-decoration: none;
-            color: inherit;
-            display: block;
+            cursor: pointer;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
         }
+        
         .blog-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
+        
         .blog-image {
             width: 100%;
-            height: 180px;
+            height: 200px;
             object-fit: cover;
         }
+        
         .blog-content {
-            padding: 1.5rem;
+            padding: 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
         }
+        
         .blog-title {
             font-size: 1.3rem;
-            margin-bottom: 0.5rem;
-            color: #212529;
+            margin-bottom: 10px;
+            color: #2c3e50;
         }
-        .blog-date {
-            color: #6c757d;
-            font-size: 0.9rem;
-            margin-bottom: 0.5rem;
-        }
+        
         .blog-excerpt {
-            color: #495057;
-            margin-bottom: 1rem;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            -webkit-box-orient: vertical;
+            color: #7f8c8d;
+            margin-bottom: 15px;
+            flex-grow: 1;
         }
-        .read-more {
-            display: inline-block;
-            color: #007bff;
-            font-weight: bold;
+        
+        .blog-date {
+            font-size: 0.9rem;
+            color: #95a5a6;
+            align-self: flex-end;
         }
-        footer {
-            background-color: #343a40;
-            color: #fff;
+        
+        .loading {
             text-align: center;
-            padding: 1.5rem 0;
-            margin-top: 2rem;
+            padding: 50px;
+            font-size: 1.5rem;
+            color: #7f8c8d;
         }
+        
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+
         @media (max-width: 768px) {
             .blog-grid {
                 grid-template-columns: 1fr;
+            }
+            
+            header {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 2rem;
             }
         }
     </style>
 </head>
 <body>
     <header>
-        <div class="container">
-            <h1>My Code Blog</h1>
-            <div class="subtitle">Tutorials, Examples and Code Snippets</div>
-        </div>
+        <h1>My Blog</h1>
+        <p class="subtitle">Thoughts, stories and ideas.</p>
     </header>
-
-    <div class="container">
-        <div class="blog-grid" id="blogGrid">
-            <!-- Blog posts will be dynamically inserted here -->
+    
+    <main>
+        <div id="blogContainer" class="blog-grid">
+            <div class="loading">Loading blogs...</div>
         </div>
-    </div>
-
+    </main>
+    
     <footer>
-        <div class="container">
-            <p>&copy; 2025 My Code Blog. All rights reserved.</p>
-        </div>
+        <p>&copy; 2025 My Blog. All rights reserved.</p>
     </footer>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Function to scan and display blog posts
-            async function loadBlogPosts() {
+            // Function to fetch and extract blog information
+            async function fetchBlogList() {
                 try {
-                    // Get list of all HTML files in the directory
-                    const response = await fetch('.');
-                    const text = await response.text();
+                    // First, fetch repository contents to get list of HTML files
+                    const currentPath = window.location.pathname.replace('index.html', '');
+                    const response = await fetch(currentPath);
                     
-                    // Create a temporary element to parse the HTML response
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch repository contents');
+                    }
+                    
+                    // Parse the directory listing page HTML
+                    const html = await response.text();
                     const parser = new DOMParser();
-                    const htmlDoc = parser.parseFromString(text, 'text/html');
+                    const doc = parser.parseFromString(html, 'text/html');
                     
-                    // Extract links to HTML files (excluding index/landing page)
-                    const links = Array.from(htmlDoc.querySelectorAll('a'))
+                    // Find all links to HTML files that aren't index.html
+                    const blogFiles = Array.from(doc.querySelectorAll('a'))
                         .filter(a => a.href.endsWith('.html') && 
-                               !a.href.includes('index.html') && 
-                               !a.href.endsWith('/'));
+                                  !a.href.includes('index.html') && 
+                                  a.href.includes(window.location.hostname))
+                        .map(a => a.href);
                     
-                    const blogGrid = document.getElementById('blogGrid');
-                    
-                    // Process each blog file
-                    for (const link of links) {
-                        const blogUrl = link.href;
-                        const blogFilename = blogUrl.substring(blogUrl.lastIndexOf('/') + 1);
-                        
-                        // Fetch each blog file to extract metadata
-                        const blogResponse = await fetch(blogFilename);
-                        const blogContent = await blogResponse.text();
-                        const blogDoc = parser.parseFromString(blogContent, 'text/html');
-                        
-                        // Extract blog metadata
-                        const title = blogDoc.querySelector('title')?.textContent || 'Untitled Blog';
-                        const metaDescription = blogDoc.querySelector('meta[name="description"]')?.getAttribute('content') || '';
-                        const metaDate = blogDoc.querySelector('meta[name="date"]')?.getAttribute('content') || 'No date';
-                        const metaImage = blogDoc.querySelector('meta[name="featured-image"]')?.getAttribute('content') || '/api/placeholder/400/320';
-                        
-                        // Create blog card
-                        const blogCard = document.createElement('a');
-                        blogCard.href = blogFilename;
-                        blogCard.className = 'blog-card';
-                        blogCard.innerHTML = `
-                            <img src="${metaImage}" alt="${title}" class="blog-image">
-                            <div class="blog-content">
-                                <h2 class="blog-title">${title}</h2>
-                                <div class="blog-date">${metaDate}</div>
-                                <p class="blog-excerpt">${metaDescription}</p>
-                                <span class="read-more">Read More</span>
-                            </div>
-                        `;
-                        
-                        blogGrid.appendChild(blogCard);
-                    }
-                    
-                    // If no blogs were found, show a message
-                    if (blogGrid.children.length === 0) {
-                        blogGrid.innerHTML = '<p style="text-align: center; grid-column: 1/-1;">No blog posts found. Add HTML files to see them here.</p>';
-                    }
+                    return await processBlogFiles(blogFiles);
                 } catch (error) {
-                    console.error('Error loading blog posts:', error);
-                    document.getElementById('blogGrid').innerHTML = '<p style="text-align: center; grid-column: 1/-1;">Error loading blog posts. Please try again later.</p>';
+                    console.error('Error fetching blog list:', error);
+                    document.getElementById('blogContainer').innerHTML = 
+                        `<div class="loading">Error loading blogs: ${error.message}</div>`;
                 }
             }
             
-            // Initialize the blog
-            loadBlogPosts();
+            // Function to process blog files and extract metadata
+            async function processBlogFiles(blogFiles) {
+                const blogPosts = [];
+                
+                for (const blogUrl of blogFiles) {
+                    try {
+                        const response = await fetch(blogUrl);
+                        if (!response.ok) continue;
+                        
+                        const html = await response.text();
+                        const parser = new DOMParser();
+                        const doc = parser.parseFromString(html, 'text/html');
+                        
+                        // Extract blog metadata
+                        const title = doc.querySelector('title')?.textContent || 'Untitled Blog';
+                        const metaDescription = doc.querySelector('meta[name="description"]')?.getAttribute('content') || '';
+                        const metaImage = doc.querySelector('meta[property="og:image"]')?.getAttribute('content') || '';
+                        const metaDate = doc.querySelector('meta[name="date"]')?.getAttribute('content') || 'No date';
+                        
+                        // If no specific meta image, try to find the first image in the content
+                        let imageUrl = metaImage;
+                        if (!imageUrl) {
+                            const firstImage = doc.querySelector('img');
+                            if (firstImage) {
+                                imageUrl = firstImage.src;
+                            }
+                        }
+                        
+                        // If still no image, use a placeholder
+                        if (!imageUrl) {
+                            imageUrl = '/api/placeholder/400/320';
+                        }
+                        
+                        // Extract a text excerpt from the content
+                        let excerpt = '';
+                        const contentElement = doc.querySelector('main') || doc.querySelector('article') || doc.body;
+                        if (contentElement) {
+                            const textContent = contentElement.textContent.trim();
+                            excerpt = textContent.slice(0, 150) + (textContent.length > 150 ? '...' : '');
+                        }
+                        
+                        blogPosts.push({
+                            title,
+                            excerpt: metaDescription || excerpt,
+                            date: metaDate,
+                            image: imageUrl,
+                            url: blogUrl
+                        });
+                    } catch (e) {
+                        console.error(`Error processing ${blogUrl}:`, e);
+                    }
+                }
+                
+                // Sort blogs by date (newest first)
+                return blogPosts.sort((a, b) => new Date(b.date) - new Date(a.date));
+            }
+            
+            // Function to render blog cards
+            function renderBlogCards(blogs) {
+                const container = document.getElementById('blogContainer');
+                
+                if (blogs.length === 0) {
+                    container.innerHTML = `<div class="loading">No blog posts found. Add HTML files to your repository.</div>`;
+                    return;
+                }
+                
+                container.innerHTML = blogs.map(blog => `
+                    <div class="blog-card" onclick="window.location.href='${blog.url}'">
+                        <img class="blog-image" src="${blog.image}" alt="${blog.title}">
+                        <div class="blog-content">
+                            <h2 class="blog-title">${blog.title}</h2>
+                            <p class="blog-excerpt">${blog.excerpt}</p>
+                            <span class="blog-date">${blog.date}</span>
+                        </div>
+                    </div>
+                `).join('');
+            }
+            
+            // Initialize the blog list
+            fetchBlogList().then(blogs => {
+                renderBlogCards(blogs);
+            });
         });
     </script>
 </body>
