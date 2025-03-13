@@ -3,226 +3,572 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Learn about the most exciting web development trends for 2025 including AI-driven interfaces, WebAssembly, and more.">
-    <meta name="date" content="2025-03-10">
-    <meta property="og:image" content="/api/placeholder/800/400">
-    <title>Top Web Development Trends for 2025</title>
+    <meta name="description" content="Learn how to create a responsive navigation bar with HTML, CSS, and JavaScript that works well on all devices.">
+    <meta name="date" content="March 13, 2025">
+    <meta name="featured-image" content="/api/placeholder/400/320">
+    <title>Building a Responsive Navigation Bar</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
     <style>
-        /* Reset and Base Styles */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
             color: #333;
             background-color: #f8f9fa;
-            padding: 20px;
+            padding-bottom: 70px; /* Space for fixed footer */
         }
-        
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background-color: #fff;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        
         header {
-            margin-bottom: 30px;
-        }
-        
-        .back-button {
-            display: inline-block;
-            margin-bottom: 20px;
-            color: #3498db;
-            text-decoration: none;
-            font-weight: 500;
-        }
-        
-        .back-button:hover {
-            text-decoration: underline;
-        }
-        
-        h1 {
-            font-size: 2.5rem;
-            color: #2c3e50;
-            margin-bottom: 15px;
-        }
-        
-        .blog-meta {
-            color: #7f8c8d;
-            font-size: 0.9rem;
-            margin-bottom: 20px;
-        }
-        
-        .featured-image {
-            width: 100%;
-            height: auto;
-            border-radius: 8px;
-            margin-bottom: 30px;
-        }
-        
-        article {
-            font-size: 1.1rem;
-        }
-        
-        article p {
-            margin-bottom: 20px;
-        }
-        
-        article h2 {
-            font-size: 1.8rem;
-            color: #2c3e50;
-            margin: 30px 0 15px;
-        }
-        
-        article h3 {
-            font-size: 1.4rem;
-            color: #2c3e50;
-            margin: 25px 0 15px;
-        }
-        
-        article ul, article ol {
-            margin-bottom: 20px;
-            padding-left: 20px;
-        }
-        
-        article li {
-            margin-bottom: 10px;
-        }
-        
-        blockquote {
-            border-left: 4px solid #3498db;
-            padding-left: 20px;
-            margin: 20px 0;
-            font-style: italic;
-            color: #555;
-        }
-        
-        footer {
-            margin-top: 50px;
-            padding-top: 20px;
-            border-top: 1px solid #eee;
-            color: #7f8c8d;
-            font-size: 0.9rem;
+            background-color: #343a40;
+            color: #fff;
+            padding: 2rem 0;
             text-align: center;
         }
-
-        code {
-            background-color: #f7f7f7;
-            padding: 2px 5px;
-            border-radius: 4px;
-            font-family: monospace;
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 20px;
         }
-
-        pre {
-            background-color: #f7f7f7;
-            padding: 15px;
+        .blog-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .publish-date {
+            color: #6c757d;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+        .blog-content {
+            background-color: #fff;
             border-radius: 8px;
-            overflow-x: auto;
-            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            margin-bottom: 2rem;
         }
-
-        pre code {
+        .section {
+            display: none;
+            min-height: 400px;
+        }
+        .section.active {
+            display: block;
+        }
+        h2 {
+            font-size: 1.8rem;
+            margin: 1.5rem 0 1rem;
+            color: #212529;
+        }
+        h3 {
+            font-size: 1.4rem;
+            margin: 1.2rem 0 0.8rem;
+            color: #343a40;
+        }
+        p {
+            margin-bottom: 1rem;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            display: block;
+        }
+        .code-nav {
+            display: flex;
+            background-color: #f1f1f1;
+            border-radius: 8px 8px 0 0;
+            overflow: hidden;
+        }
+        .code-nav-item {
+            padding: 0.5rem 1rem;
+            background-color: #e9ecef;
+            border: none;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        .code-nav-item.active {
+            background-color: #343a40;
+            color: white;
+        }
+        pre {
+            margin: 0 !important;
+            border-radius: 0 0 8px 8px;
+            position: relative;
+        }
+        .code-container {
+            position: relative;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background-color: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 4px;
+            color: white;
+            padding: 5px 10px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            z-index: 10;
+        }
+        .copy-btn:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+        footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: #343a40;
+            color: #fff;
+            padding: 0.8rem 0;
+        }
+        .footer-nav {
+            display: flex;
+            justify-content: space-around;
+        }
+        .footer-nav-btn {
             background-color: transparent;
-            padding: 0;
+            border: none;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            padding: 0.3rem 1rem;
+            border-radius: 4px;
         }
-
-        @media (max-width: 768px) {
-            .container {
-                padding: 20px;
+        .footer-nav-btn.active {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        .footer-nav-btn:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Preview specific styles */
+        .preview-container {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            background-color: white;
+        }
+        
+        /* Demo navbar styles for preview */
+        .demo-navbar {
+            background-color: #333;
+            overflow: hidden;
+            border-radius: 5px;
+        }
+        .demo-navbar a {
+            float: left;
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+        .demo-navbar a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+        .demo-navbar .icon {
+            display: none;
+        }
+        @media screen and (max-width: 600px) {
+            .demo-navbar a:not(:first-child) {
+                display: none;
             }
-            
-            h1 {
-                font-size: 2rem;
+            .demo-navbar a.icon {
+                float: right;
+                display: block;
+            }
+            .demo-navbar.responsive {
+                position: relative;
+            }
+            .demo-navbar.responsive a.icon {
+                position: absolute;
+                right: 0;
+                top: 0;
+            }
+            .demo-navbar.responsive a {
+                float: none;
+                display: block;
+                text-align: left;
             }
         }
     </style>
 </head>
 <body>
+    <header>
+        <div class="container">
+            <h1>Building a Responsive Navigation Bar</h1>
+            <div class="publish-date">Published on March 13, 2025</div>
+        </div>
+    </header>
+
     <div class="container">
-        <header>
-            <a href="index.html" class="back-button">← Back to all blogs</a>
-            <h1>Top Web Development Trends for 2025</h1>
-            <div class="blog-meta">Published on March 10, 2025 • 7 min read</div>
-        </header>
-        
-        <img src="/api/placeholder/800/400" alt="Web Development Trends" class="featured-image">
-        
-        <article>
-            <p>The web development landscape continues to evolve at a rapid pace. As we move further into 2025, several emerging technologies and methodologies are reshaping how we build and interact with web applications. This blog post explores the most significant trends that every developer should be aware of.</p>
+        <div class="blog-content">
+            <!-- Reading Section -->
+            <section id="reading" class="section active">
+                <h2>Creating a Responsive Navigation Bar</h2>
+                <p>Navigation bars are a fundamental component of modern websites. They help users navigate between different pages and sections of your site. In this tutorial, we'll build a responsive navigation bar that works well on both desktop and mobile devices.</p>
+                
+                <img src="/api/placeholder/400/320" alt="Responsive Navigation Bar Example">
+                
+                <p>A responsive navigation bar adjusts its layout based on the screen size. On desktop, it typically displays all navigation links horizontally. On mobile devices, it collapses into a "hamburger menu" to save space.</p>
+                
+                <h3>Key Features</h3>
+                <p>Our responsive navigation bar will include:</p>
+                <ul>
+                    <li>Horizontal layout on desktop screens</li>
+                    <li>Collapsible "hamburger menu" on mobile screens</li>
+                    <li>Smooth transitions for a better user experience</li>
+                    <li>Active state to highlight the current page</li>
+                </ul>
+                
+                <h3>Understanding the Structure</h3>
+                <p>We'll build our navigation bar using HTML for structure, CSS for styling, and a small amount of JavaScript for the mobile toggle functionality. The navigation will include:</p>
+                <ul>
+                    <li>A brand/logo area</li>
+                    <li>Navigation links</li>
+                    <li>A toggle button for mobile devices</li>
+                </ul>
+                
+                <p>Let's get started by looking at the code and then see it in action!</p>
+            </section>
             
-            <h2>1. AI-Driven Interfaces</h2>
-            <p>Artificial intelligence is no longer just a buzzword; it's becoming an integral part of web development. In 2025, we're seeing a surge in AI-powered interfaces that can adapt to user behavior and preferences in real-time.</p>
+            <!-- Code Section -->
+            <section id="code" class="section">
+                <h2>Code Implementation</h2>
+                
+                <div class="code-nav">
+                    <button class="code-nav-item active" data-file="html">HTML</button>
+                    <button class="code-nav-item" data-file="css">CSS</button>
+                    <button class="code-nav-item" data-file="js">JavaScript</button>
+                </div>
+                
+                <div class="code-container" id="html-code">
+                    <button class="copy-btn" onclick="copyCode('html-snippet')">Copy</button>
+                    <pre><code class="language-html" id="html-snippet">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;Responsive Navbar&lt;/title&gt;
+    &lt;link rel="stylesheet" href="styles.css"&gt;
+    &lt;link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;nav class="navbar"&gt;
+        &lt;div class="brand"&gt;YourWebsite&lt;/div&gt;
+        &lt;a href="javascript:void(0);" class="toggle-btn" onclick="toggleNavbar()"&gt;
+            &lt;i class="fas fa-bars"&gt;&lt;/i&gt;
+        &lt;/a&gt;
+        &lt;div class="navbar-links"&gt;
+            &lt;a href="#" class="active"&gt;Home&lt;/a&gt;
+            &lt;a href="#"&gt;About&lt;/a&gt;
+            &lt;a href="#"&gt;Services&lt;/a&gt;
+            &lt;a href="#"&gt;Products&lt;/a&gt;
+            &lt;a href="#"&gt;Contact&lt;/a&gt;
+        &lt;/div&gt;
+    &lt;/nav&gt;
+    
+    &lt;div class="content"&gt;
+        &lt;h1&gt;Welcome to Our Website&lt;/h1&gt;
+        &lt;p&gt;This is a demonstration of a responsive navigation bar.&lt;/p&gt;
+    &lt;/div&gt;
+    
+    &lt;script src="script.js"&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+                </div>
+                
+                <div class="code-container" id="css-code" style="display: none;">
+                    <button class="copy-btn" onclick="copyCode('css-snippet')">Copy</button>
+                    <pre><code class="language-css" id="css-snippet">* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+}
+
+.navbar {
+    background-color: #333;
+    overflow: hidden;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+}
+
+.brand {
+    color: white;
+    font-size: 1.5rem;
+    font-weight: bold;
+    padding: 14px 0;
+}
+
+.navbar-links {
+    display: flex;
+}
+
+.navbar-links a {
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
+
+.navbar-links a:hover {
+    background-color: #ddd;
+    color: black;
+}
+
+.navbar-links a.active {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.toggle-btn {
+    display: none;
+    color: white;
+    font-size: 1.5rem;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+/* Media Query for Responsive Design */
+@media screen and (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .navbar-top {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .navbar-links {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    .navbar-links.active {
+        display: flex;
+    }
+    
+    .navbar-links a {
+        text-align: left;
+        padding: 15px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .toggle-btn {
+        display: block;
+        align-self: flex-end;
+    }
+    
+    .content {
+        padding: 20px;
+    }
+}</code></pre>
+                </div>
+                
+                <div class="code-container" id="js-code" style="display: none;">
+                    <button class="copy-btn" onclick="copyCode('js-snippet')">Copy</button>
+                    <pre><code class="language-javascript" id="js-snippet">// Function to toggle the navigation menu on mobile
+function toggleNavbar() {
+    const navbarLinks = document.querySelector('.navbar-links');
+    navbarLinks.classList.toggle('active');
+}
+
+// Close the navbar when a link is clicked (mobile view)
+document.addEventListener('DOMContentLoaded', function() {
+    const navLinks = document.querySelectorAll('.navbar-links a');
+    
+    navLinks.forEach(link => {
+        link.addEventListener('click', function() {
+            if (window.innerWidth <= 768) {
+                const navbarLinks = document.querySelector('.navbar-links');
+                navbarLinks.classList.remove('active');
+            }
+        });
+    });
+    
+    // Add resize listener to handle transitions between mobile and desktop
+    window.addEventListener('resize', function() {
+        if (window.innerWidth > 768) {
+            const navbarLinks = document.querySelector('.navbar-links');
+            if (navbarLinks.classList.contains('active')) {
+                navbarLinks.classList.remove('active');
+            }
+        }
+    });
+});</code></pre>
+                </div>
+            </section>
             
-            <p>Key developments include:</p>
-            <ul>
-                <li>Conversational UIs that can understand complex user queries</li>
-                <li>Predictive interfaces that anticipate user needs before they're expressed</li>
-                <li>Accessibility improvements through AI-powered voice and gesture recognition</li>
-            </ul>
-            
-            <blockquote>
-                <p>"The most powerful interfaces of tomorrow will be the ones that disappear into the background, powered by AI that understands us better than we understand ourselves." — Tech Visionary</p>
-            </blockquote>
-            
-            <h2>2. WebAssembly (Wasm) Goes Mainstream</h2>
-            <p>WebAssembly has been gaining traction for years, but 2025 marks its transition into a mainstream technology. With near-native performance, Wasm is enabling web applications to handle computationally intensive tasks that were previously impossible in the browser.</p>
-            
-            <p>A simple Wasm example:</p>
-            <pre><code>(module
-  (func $add (param $a i32) (param $b i32) (result i32)
-    local.get $a
-    local.get $b
-    i32.add)
-  (export "add" (func $add))
-)</code></pre>
-            
-            <h2>3. Serverless Architecture Evolution</h2>
-            <p>Serverless computing continues to evolve, with more sophisticated tooling and integrations. The focus in 2025 is on reducing cold start times and improving local development experiences.</p>
-            
-            <h3>Popular Serverless Platforms in 2025:</h3>
-            <ul>
-                <li>AWS Lambda Pro</li>
-                <li>Cloudflare Hyperworkers</li>
-                <li>Vercel Compute</li>
-                <li>Deno Deploy Enterprise</li>
-            </ul>
-            
-            <h2>4. Micro-Frontends for Complex Applications</h2>
-            <p>As web applications grow in complexity, micro-frontend architecture is becoming the preferred approach for large teams. This pattern allows multiple teams to work on different parts of an application independently, using different technologies if necessary.</p>
-            
-            <p>The benefits include:</p>
-            <ul>
-                <li>Independent deployment of application sections</li>
-                <li>Tech stack flexibility across teams</li>
-                <li>Better scalability for large organizations</li>
-            </ul>
-            
-            <h2>5. Rust-Based Web Development</h2>
-            <p>Rust continues its meteoric rise, now becoming a serious contender in web development. With excellent WebAssembly support and growing framework ecosystems, Rust is challenging JavaScript's dominance for performance-critical web applications.</p>
-            
-            <p>Frameworks gaining popularity include:</p>
-            <ul>
-                <li>Yew for frontend development</li>
-                <li>Actix-web for backend services</li>
-                <li>Tauri for desktop-like web applications</li>
-            </ul>
-            
-            <h2>Conclusion: Preparing for the Future</h2>
-            <p>The web development landscape of 2025 is characterized by increased intelligence, improved performance, and better developer experiences. To stay relevant, developers should focus on mastering AI integration, experimenting with WebAssembly, and exploring alternative languages like Rust.</p>
-            
-            <p>What trends are you most excited about? Share your thoughts in the comments below!</p>
-        </article>
-        
-        <footer>
-            <p>&copy; 2025 My Blog. All rights reserved.</p>
-        </footer>
+            <!-- Preview Section -->
+            <section id="preview" class="section">
+                <h2>Live Preview</h2>
+                <p>Below is a working preview of our responsive navigation bar. Try resizing your browser window to see how it adapts to different screen sizes.</p>
+                
+                <div class="preview-container">
+                    <div class="demo-navbar" id="demoNavbar">
+                        <a href="#" class="active">Home</a>
+                        <a href="#">About</a>
+                        <a href="#">Services</a>
+                        <a href="#">Products</a>
+                        <a href="#">Contact</a>
+                        <a href="javascript:void(0);" class="icon" onclick="toggleDemoNav()">
+                            ☰
+                        </a>
+                    </div>
+                </div>
+                
+                <p>On mobile devices (or smaller browser windows), the navigation links collapse into a hamburger menu (☰) that can be toggled open and closed.</p>
+                
+                <h3>How It Works</h3>
+                <ul>
+                    <li>The HTML provides the structure for our navigation bar</li>
+                    <li>CSS handles both the styling and the responsive layout changes</li>
+                    <li>JavaScript adds interactivity for the mobile toggle</li>
+                </ul>
+                
+                <p>This implementation is lightweight, accessible, and works across all modern browsers. You can easily customize the colors, spacing, and animations to match your website's design.</p>
+            </section>
+        </div>
     </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-nav">
+                <button id="readingBtn" class="footer-nav-btn active">Reading</button>
+                <button id="codeBtn" class="footer-nav-btn">Code</button>
+                <button id="previewBtn" class="footer-nav-btn">Preview</button>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Syntax highlighting
+        document.addEventListener('DOMContentLoaded', function() {
+            hljs.highlightAll();
+            
+            // Navigation buttons
+            const readingBtn = document.getElementById('readingBtn');
+            const codeBtn = document.getElementById('codeBtn');
+            const previewBtn = document.getElementById('previewBtn');
+            
+            const readingSection = document.getElementById('reading');
+            const codeSection = document.getElementById('code');
+            const previewSection = document.getElementById('preview');
+            
+            // Footer navigation
+            readingBtn.addEventListener('click', function() {
+                setActiveSection(readingSection, readingBtn);
+            });
+            
+            codeBtn.addEventListener('click', function() {
+                setActiveSection(codeSection, codeBtn);
+            });
+            
+            previewBtn.addEventListener('click', function() {
+                setActiveSection(previewSection, previewBtn);
+            });
+            
+            function setActiveSection(section, button) {
+                // Hide all sections
+                document.querySelectorAll('.section').forEach(s => {
+                    s.classList.remove('active');
+                });
+                
+                // Remove active class from all buttons
+                document.querySelectorAll('.footer-nav-btn').forEach(b => {
+                    b.classList.remove('active');
+                });
+                
+                // Show active section and button
+                section.classList.add('active');
+                button.classList.add('active');
+                
+                // Scroll to top of content
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            }
+            
+            // Code tab navigation
+            const codeNavItems = document.querySelectorAll('.code-nav-item');
+            const htmlCode = document.getElementById('html-code');
+            const cssCode = document.getElementById('css-code');
+            const jsCode = document.getElementById('js-code');
+            
+            codeNavItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    // Remove active class from all tabs
+                    codeNavItems.forEach(tab => {
+                        tab.classList.remove('active');
+                    });
+                    
+                    // Add active class to clicked tab
+                    this.classList.add('active');
+                    
+                    // Hide all code containers
+                    htmlCode.style.display = 'none';
+                    cssCode.style.display = 'none';
+                    jsCode.style.display = 'none';
+                    
+                    // Show selected code container
+                    const fileType = this.getAttribute('data-file');
+                    document.getElementById(fileType + '-code').style.display = 'block';
+                });
+            });
+            
+            // Copy code functionality
+            window.copyCode = function(elementId) {
+                const codeElement = document.getElementById(elementId);
+                const textToCopy = codeElement.textContent;
+                
+                navigator.clipboard.writeText(textToCopy).then(function() {
+                    const copyBtn = document.querySelector(`button[onclick="copyCode('${elementId}')"]`);
+                    const originalText = copyBtn.textContent;
+                    
+                    copyBtn.textContent = 'Copied!';
+                    setTimeout(() => {
+                        copyBtn.textContent = originalText;
+                    }, 2000);
+                }).catch(function(err) {
+                    console.error('Failed to copy: ', err);
+                });
+            };
+            
+            // Toggle demo navbar for preview section
+            window.toggleDemoNav = function() {
+                const navbar = document.getElementById("demoNavbar");
+                if (navbar.className === "demo-navbar") {
+                    navbar.className += " responsive";
+                } else {
+                    navbar.className = "demo-navbar";
+                }
+            };
+        });
+    </script>
 </body>
 </html>
